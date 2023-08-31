@@ -1,4 +1,4 @@
-package com.luckytrip;
+package com.luckytripindia;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

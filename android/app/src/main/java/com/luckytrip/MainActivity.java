@@ -1,4 +1,4 @@
-package com.luckytrip;
+package com.luckytripindia;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
