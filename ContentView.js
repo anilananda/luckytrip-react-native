@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import BackNextButton from './BackNextButton';
 
@@ -22,51 +22,51 @@ const ContentView = () => {
 
   //#region =====Start Back Handel with button===============
 
-  const [currentUrl, setCurrentUrl] = useState(webPageurl);
-  const [isVisibleBackButton, setIsVisibleBackButton] = useState(false);
-  useEffect(() => {
-    console.log(currentUrl);
+  // const [currentUrl, setCurrentUrl] = useState(webPageurl);
+  // const [isVisibleBackButton, setIsVisibleBackButton] = useState(false);
+  // useEffect(() => {
+  //   console.log(currentUrl);
 
-    currentUrl === webPageurl
-      ? setIsVisibleBackButton(false)
-      : setIsVisibleBackButton(true);
-  }, [currentUrl]);
+  //   currentUrl === webPageurl
+  //     ? setIsVisibleBackButton(false)
+  //     : setIsVisibleBackButton(true);
+  // }, [currentUrl]);
 
-  backButtonHandler = () => {
-    if (webviewRef.current) webviewRef.current.goBack();
-  };
+  // backButtonHandler = () => {
+  //   if (webviewRef.current) webviewRef.current.goBack();
+  // };
 
-  frontButtonHandler = () => {
-    if (webviewRef.current) webviewRef.current.goForward();
-  };
+  // frontButtonHandler = () => {
+  //   if (webviewRef.current) webviewRef.current.goForward();
+  // };
 
   //#endregion =====End Back Handel with button===============
 
   //#region =========Start Hardware back handel====================
 
-  // const [currentUrl, setCurrentUrl] = useState(webPageurl);
+  const [currentUrl, setCurrentUrl] = useState(webPageurl);
 
-  // useEffect(() => {
-  //   if (Platform.OS === 'android') {
-  //     BackHandler.addEventListener('hardwareBackPress', HandleBackPressed);
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', HandleBackPressed);
 
-  //     return () => {
-  //       BackHandler.removeEventListener('hardwareBackPress', HandleBackPressed);
-  //     };
-  //   }
-  // }, [currentUrl]);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', HandleBackPressed);
+      };
+    }
+  }, [currentUrl]);
 
-  // const HandleBackPressed = () => {
-  //   console.log('back handel ->', currentUrl);
+  const HandleBackPressed = () => {
+    console.log('back handel ->', currentUrl);
 
-  //   if (currentUrl === webPageurl || currentUrl === '') return false;
+    if (currentUrl === webPageurl || currentUrl === '') return false;
 
-  //   if (webviewRef.current) {
-  //     webviewRef.current.goBack();
-  //     return true;
-  //   }
-  //   return false;
-  // };
+    if (webviewRef.current) {
+      webviewRef.current.goBack();
+      return true;
+    }
+    return false;
+  };
 
   //#endregion =========END Hardware back handel====================
   const jsCode = `document.getElementById('myAppPromotion').style.display = 'none';`;
@@ -85,21 +85,21 @@ const ContentView = () => {
             <ActivityIndicator size="large" color="red" />
           </View>
         )}
-        cacheEnabled={false}
+        //cacheEnabled={false}
         ref={webviewRef}
-        // onNavigationStateChange={navState => {
-        //   setCanGoBack(navState.canGoBack);
-        //   setCanGoForward(navState.canGoForward);
-        //   setCurrentUrl(navState.url);
-        // }}
-
         onNavigationStateChange={navState => {
-          setCanGoForward(navState.canGoForward); ////enable only if want back with button
           setCanGoBack(navState.canGoBack);
+          setCanGoForward(navState.canGoForward);
           setCurrentUrl(navState.url);
         }}
+
+        // onNavigationStateChange={navState => {
+        //   setCanGoForward(navState.canGoForward); ////enable only if want back with button
+        //   setCanGoBack(navState.canGoBack);
+        //   setCurrentUrl(navState.url);
+        // }}
       />
-      {isVisibleBackButton && <BackNextButton />}
+      {/* {isVisibleBackButton && <BackNextButton />} */}
     </View>
   );
 };
